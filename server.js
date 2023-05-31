@@ -1,46 +1,152 @@
 var express = require('express');
-var app = express();
-const path = require('path');
-app.use(express.json());
+var router = express.Router();
+const path = require('path'); router.use(express.json());
 
 // var express = require("express");
 // var router = express.Router();
-// const app = express();
+// const router = express();
 const { async } = require("@firebase/util");
 const { FieldValue } = require("firebase-admin");
 const { db } = require("./firebase.js");
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.get('/nav', function(req, res) {
+//  router.set('views', path.join(__dirname, 'views')); router.set('view engine', 'ejs');
+ router.get('/nav', function(req, res) {
     res.render("nav")
   });
-  app.get('/cstudy', function(req, res) {
+  router.get('/cstudy', function(req, res) {
     res.render("cstudy")
   });
-  app.get('/cconcern', function(req, res) {
-    res.render("cconcern")
-  });
-  
-  app.get('/ccustodian', function(req, res) {
-    res.render("ccustodian")
-  });
-  app.get('/cfee', function(req, res) {
+//   router.get('/cconcern', function(req, res) {
+//     res.render("cconcern")
+//   });
+  router.get('/cfee', function(req, res) {
     res.render("cfee")
   });
-  app.get('/cinternship', function(req, res) {
+  router.get('/cinternship', function(req, res) {
     res.render("cinternship")
   });
-  app.get('/cresidence', function(req, res) {
-    res.render("cresidence")
-  });
-  app.get('/cstudy&conduct', function(req, res) {
+  router.get('/cstudy&conduct', function(req, res) {
     res.render("cstudy&conduct")
   });
+  // router.get('/ccustodian', function(req, res) {
+  //   res.render("ccustodian")
+  // });
+  router.get('/cresidence', function(req, res) {
+    res.render("cresidence")
+  });
+
   
 
-  app.get('/cconcern',async (req,res)=>{
+ router.get('/cstudy', function(req, res) {
+  try{
+    const usersRef=db.collection("student");
+    const doc= usersRef.get();
+    let responseArr=[];
+    doc.forEach(ele=>{
+        responseArr.push(ele.data());
+        console.log(ele.data())
+    })
+     res.render('cstudy',{responseArr:responseArr});
+    //res.send("hello")
+    console.log(responseArr)
+   
+//res.end()
+}catch(error){
+    res.send(error);
+}
+  });
+ router.get('/ccustodian', function(req, res) {
+  try{
+    const usersRef=db.collection("student");
+    const doc= usersRef.get();
+    let responseArr=[];
+    doc.forEach(ele=>{
+        responseArr.push(ele.data());
+        console.log(ele.data())
+    })
+     res.render('ccustodian',{responseArr:responseArr});
+    // res.send("hello")
+    console.log(responseArr)
+   
+//res.end()
+}catch(error){
+    res.send(error);
+}
+  });
+//  router.get('/cfee', function(req, res) {
+//   try{
+//     const usersRef=db.collection("student");
+//     const doc= usersRef.get();
+//     let responseArr=[];
+//     doc.forEach(ele=>{
+//         responseArr.push(ele.data());
+//         console.log(ele.data())
+//     })
+//      res.render('cfee',{responseArr:responseArr});
+//     //res.send("hello")
+//     console.log(responseArr)
+   
+// //res.end()
+// }catch(error){
+//     res.send(error);
+// }
+//   });
+//  router.get('/cinternship', function(req, res) {
+//   try{
+//     const usersRef=db.collection("student");
+//     const doc= usersRef.get();
+//     let responseArr=[];
+//     doc.forEach(ele=>{
+//         responseArr.push(ele.data());
+//         console.log(ele.data())
+//     })
+//      res.render('cinternship',{responseArr:responseArr});
+//     //res.send("hello")
+//     console.log(responseArr)
+   
+// //res.end()
+// }catch(error){
+//     res.send(error);
+// }
+//   });
+//  router.get('/cresidence', function(req, res) {
+//   try{
+//     const usersRef=db.collection("student");
+//     const doc= usersRef.get();
+//     let responseArr=[];
+//     doc.forEach(ele=>{
+//         responseArr.push(ele.data());
+//         console.log(ele.data())
+//     })
+//      res.render('cresidence',{responseArr:responseArr});
+//     //res.send("hello")
+//     console.log(responseArr)
+   
+// //res.end()
+// }catch(error){
+//     res.send(error);
+// }
+//   });
+//  router.get('/cstudy&conduct', function(req, res) {
+//   try{
+//     const usersRef=db.collection("student");
+//     const doc= usersRef.get();
+//     let responseArr=[];
+//     doc.forEach(ele=>{
+//         responseArr.push(ele.data());
+//         console.log(ele.data())
+//     })
+//      res.render('cstudy&conduct',{responseArr:responseArr});
+//     //res.send("hello")
+//     console.log(responseArr)
+   
+// //res.end()
+// }catch(error){
+//     res.send(error);
+// }
+//   });
+  
+
+ router.get('/cconcern',async (req,res)=>{
     try{
         const usersRef=db.collection("student");
         const doc=await usersRef.get();
@@ -61,9 +167,9 @@ app.get('/nav', function(req, res) {
   
   
   
-
-app.get('/', function(req, res) {
+ router.get('/', function(req, res) {
     res.render("index");
 });
 
-app.listen(8000);
+// router.listen(8000);
+module.exports =router;
